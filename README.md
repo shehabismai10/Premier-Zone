@@ -29,20 +29,4 @@ cd Premier-Zone
 mvn clean install
 
 # Run the application
-mvn spring-boot:run
-
-Usage
-Access the API endpoints via http://localhost:8080.
-Use Postman or any HTTP client to test:
-/players → GET all players
-/players/{id} → GET a specific player
-/players → POST new player (requires JWT token)
-/players/{id} → PUT update player (requires JWT token)
-/players/{id} → DELETE player (requires JWT token)
-Contributing
-We welcome contributions! To contribute to this project:
-Fork the repository.
-Create your feature branch (git checkout -b feature/AmazingFeature).
-Commit your changes (git commit -m 'Add some AmazingFeature').
-Push to the branch (git push origin feature/AmazingFeature).
-Open a pull request.
+mvn spring-boot:run.
