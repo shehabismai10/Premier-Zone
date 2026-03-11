@@ -206,4 +206,3 @@ We welcome contributions! To contribute to this project, please follow these ste
 ## Acknowledgments
 
 * Thank you to all contributors!
-*
