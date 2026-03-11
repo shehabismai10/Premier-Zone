@@ -30,3 +30,31 @@ mvn clean install
 
 # Run the application
 mvn spring-boot:run.
+
+
+
+## Usage
+- Access the API endpoints via `http://localhost:8080`.
+- Use Postman or any HTTP client to test:
+
+### Endpoints
+#### GET /players
+Fetch all players.
+Example response:
+```json
+[
+  {
+    "id": 1,
+    "name": "David Raya",
+    "position": "GKP",
+    "team": "Arsenal",
+    "points": 371
+  },
+  {
+    "id": 2,
+    "name": "Aaron Ramsdale",
+    "position": "GKP",
+    "team": "Arsenal",
+    "points": 250
+  }
+]
