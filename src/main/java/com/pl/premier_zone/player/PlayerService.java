@@ -37,7 +37,7 @@ public class PlayerService {
         // .filter(player -> player.getName().equals(name))
         // .toList()
     }
-     public List<Player> getPlayerByPosition(String position){
+    public List<Player> getPlayerByPosition(String position){
         return playerRepository.findByPosition(position);
     }
     public List<Player> getPlayersByTeamAndPosition(String team, String position){
@@ -46,10 +46,10 @@ public class PlayerService {
 
 
     public Player addPlayer(Player player){
-       return playerRepository.save(player);
+    return playerRepository.save(player);
     }
 
-   
+
     public Player updatePlayer(Integer id, Player player){
 
         Player existingPlayer = playerRepository.findById(id)
