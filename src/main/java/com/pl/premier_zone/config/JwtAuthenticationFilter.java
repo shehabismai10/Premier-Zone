@@ -38,39 +38,48 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userEmail;
-        
-        // هنا بنكتب منطق "عسكري المرور" اللي شرحناه (التأكد من التوكن)
 
 
-        // 1. فحص وجود التوكن
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        filterChain.doFilter(request, response); // بيمرر الطلب للي بعده (زي الـ Register) بسلام
+        return;
+    }
+        
+
+        //the filter start here
+
+        // 1.check if the Authorization header is present and starts with "Bearer "
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            //if not, just pass the request to the next filter in the chain
             filterChain.doFilter(request, response);
             return;
         }
 
-        // 2. استخراج التوكن والإيميل
+        // 2.extract token first 7 characters("Bearer")
         jwt = authHeader.substring(7);
+        //extract username (email) from the token using jwtService
         userEmail = jwtService.extractUsername(jwt);
 
-        // 3. لو فيه إيميل واليوزر لسه مش Authenticated
+        // 3. if there is an email and the user is not yet authenticated
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
             
-            // 4. التأكد من صلاحية التوكن
+            // 4. validate the token against the user details using jwtService
             if (jwtService.isTokenValid(jwt, userDetails)) {
+                //load the user details 
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
-                        null,
-                        userDetails.getAuthorities()
+                        null, // no credentials needed since we are using JWT (and it will be dangerous to store the password in the token) 
+                        userDetails.getAuthorities() //check the authorities (roles) of the user and set them in the authentication token
                 );
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 
-                // 5. تسجيل الدخول في سبرينج
+                // 5.set the authentication in the SecurityContext 
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
         
-        // 6. كمل لباقي الفلاتر
+        // 6.then pass the request to the next filter in the chain
         filterChain.doFilter(request, response);
     
 

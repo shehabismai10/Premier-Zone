@@ -1,14 +1,10 @@
 package com.pl.premier_zone.config;
 
-import java.security.Key;
-import java.util.Base64;
 import java.util.function.Function;
 
 import javax.crypto.SecretKey;
 
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
@@ -74,8 +70,17 @@ public class JwtService {
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
     final String username = extractUsername(token);
-    // اتأكد إن الاسم اللي في التوكن هو هو اللي في الداتابيز، وإن التوكن مخلصش وقته
+    // check if the username from the token matches the username from the user details and also check if the token is not expired      
     return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+}
+
+    public String generateToken(UserDetails userDetails) {
+    return Jwts.builder()
+            .subject(userDetails.getUsername()) // set the subject of the token to the username (or email) of the user
+            .issuedAt(new java.util.Date(System.currentTimeMillis())) //when the token is issued 
+            .expiration(new java.util.Date(System.currentTimeMillis() + 1000 * 60 * 24)) // set the exp time for 24 hours (1000 milliseconds * 60 seconds * 60 minutes * 24 hours)    
+            .signWith(getSignInKey()) // sign the token with the secret key
+            .compact();               // build the token and serialize it to a string
 }
 
 
