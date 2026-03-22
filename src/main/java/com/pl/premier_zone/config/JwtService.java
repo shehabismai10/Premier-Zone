@@ -75,10 +75,15 @@ public class JwtService {
 }
 
     public String generateToken(UserDetails userDetails) {
+            java.util.Map<String, Object> extraClaims = new java.util.HashMap<>();
+            extraClaims.put("roles", userDetails.getAuthorities().stream()
+            .map(org.springframework.security.core.GrantedAuthority::getAuthority)
+            .collect(java.util.stream.Collectors.toList()));
+
     return Jwts.builder()
             .subject(userDetails.getUsername()) // set the subject of the token to the username (or email) of the user
-            .issuedAt(new java.util.Date(System.currentTimeMillis())) //when the token is issued 
-            .expiration(new java.util.Date(System.currentTimeMillis() + 1000 * 60 * 24)) // set the exp time for 24 hours (1000 milliseconds * 60 seconds * 60 minutes * 24 hours)    
+            .claims(extraClaims) // 👈 دي الحتة اللي كانت ناقصة (بتحط الـ Roles جوه الـ Payload)            .issuedAt(new java.util.Date(System.currentTimeMillis())) //when the token is issued 
+            .expiration(new java.util.Date(System.currentTimeMillis() + 1000 * 60 *60* 24)) // set the exp time for 24 hours (1000 milliseconds * 60 seconds * 60 minutes * 24 hours)    
             .signWith(getSignInKey()) // sign the token with the secret key
             .compact();               // build the token and serialize it to a string
 }

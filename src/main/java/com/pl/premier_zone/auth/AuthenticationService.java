@@ -1,5 +1,5 @@
 package com.pl.premier_zone.auth;
-//THIS CLASS FOR THE SERVICE LAYER THAT WE WILL IMPLEMENT THE BUSINESS LOGIC IN IT
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,87 +10,76 @@ import com.pl.premier_zone.user.Role;
 import com.pl.premier_zone.user.User;
 import com.pl.premier_zone.user.UserRepository;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
-//this required args constructor is for the final fields that we will add later like userRepository and jwtService it will generate constructor for them
 public class AuthenticationService {
-
-    //lets first make our objects that we will use in the service layer like userRepository and jwtService
-    //we will use them in the register and login methods that we will create later
 
     private final UserRepository userRepository;
     private final JwtService jwtService;
-    private final PasswordEncoder passwordEncoder; // we will use this to encode the password before saving it to the database and to match the password when the user login
-    private final AuthenticationManager authenticationManager; // we will use this to authenticate the user when he login
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
-
-
-
-    public AuthenticationResponse register (RegisterRequest request){
-        //this method for registering the user and saving it to the database and returning the token to the front-end
-
-        //first we will create a new user object and set the fields from the request object that we get from the front-end
-        var user= User.builder()
-                .username(request.getUsername())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER) // we will set the role to USER by default when the user register
-                .build();
-                //then we will save the user to the database
-                userRepository.save(user);
-
-                //then we will generate the token for the user and return it to the front-end
-                var jwtToken=jwtService.generateToken(user);
-                return AuthenticationResponse.builder()
-                        .token(jwtToken)
-                        .build();
-
-
+    // الـ Constructor اليدوي لضمان الـ Dependency Injection حتى لو Lombok مهنج
+    public AuthenticationService(
+            UserRepository userRepository,
+            JwtService jwtService,
+            PasswordEncoder passwordEncoder,
+            AuthenticationManager authenticationManager
+    ) {
+        this.userRepository = userRepository;
+        this.jwtService = jwtService;
+        this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
     }
 
+    /**
+     * ميثود التسجيل: بتحول الطلب لمستخدم جديد وتحفظه وتطلع له Token
+     */
+    public AuthenticationResponse register(RegisterRequest request) {
+        // استخدام الـ Setters اليدوية بدل الـ Builder المعطل
+        User user = new User();
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRole(Role.USER);
 
-    public AuthenticationResponse login (AuthenticationRequest  request){
+        userRepository.save(user);
+
+        // توليد التوكن
+        var jwtToken = jwtService.generateToken(user);
         
-        //this will check if the email and pass is matched with database
+        // بناء الـ Response يدوي
+        AuthenticationResponse response = new AuthenticationResponse();
+        response.setToken(jwtToken);
+        
+        return response;
+    }
+
+    /**
+     * ميثود تسجيل الدخول: بتتأكد من البيانات وبترجع التوكن
+     */
+    public AuthenticationResponse login(AuthenticationRequest request) {
+        // التأكد من صحة الإيميل والباسورد عبر الـ AuthenticationManager
         authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                request.getEmail(), 
-                request.getPassword())
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getPassword()
+                )
         );
 
 
-
-        //get the user from database
-        var user=userRepository.findByEmail(request.getEmail())
-                    .orElseThrow(() -> new RuntimeException("User not found"));
-        
         
 
-        //generate the token 
-        var jwtToken=jwtService.generateToken(user);
+        // لو البيانات صح، بنجيب المستخدم من الداتا بيز
+        var user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
+        // توليد توكن جديد للجلسة الحالية
+        var jwtToken = jwtService.generateToken(user);
 
-        
-
-
-        //Create an instance of the response object to serve as a container for the data
+        // إرجاع التوكن في الـ Response
         AuthenticationResponse response = new AuthenticationResponse();
-        //Wrap the generated token inside the response object to be returned as JSON
         response.setToken(jwtToken);
-
-
-        return response;
-
-
-
-
-
         
-
+        return response;
     }
-
-
-
 }

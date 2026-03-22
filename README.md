@@ -1,208 +1,102 @@
-# Premier-Zone
+Markdown
+# 🏟️ Premier-Zone
 
-## Description
+## 📖 Description
+Premier-Zone is a robust Java Spring Boot application designed to manage and analyze Premier League player statistics. The system features a secure **JWT-based authentication** layer, allowing for personalized user experiences and protected data management.
 
-Premier-Zone is a Java Spring Boot project that manages Premier League player statistics.
-It allows users to view, add, update, and delete player data, with a secure JWT-based authentication system.
+## 🚀 Features
+* **Secure Auth:** Full JWT Authentication (Register/Login).
+* **Premier League Data:** Comprehensive player stats (Goals, Assists, Teams).
+* **Role-Based Access:** Managed access for `USER` and `ADMIN` roles.
+* **Database Integration:** Persistent storage using MySQL.
+* **RESTful API:** Clean and versioned endpoints (`/api/v1`).
 
-## Badges
+## 🛠️ Installation & Setup
 
- 
+1. **Clone the repository**
+   ```bash
+   git clone [https://github.com/shehabismai10/Premier-Zone.git](https://github.com/shehabismai10/Premier-Zone.git)
+   cd Premier-Zone
+Database Configuration
+Update src/main/resources/application.properties with your MySQL credentials:
 
-## Features
+Properties
+spring.datasource.url=jdbc:mysql://localhost:3306/premier_league
+spring.datasource.username=root
+spring.datasource.password=root
+spring.jpa.hibernate.ddl-auto=update
+Build and Run
 
-* Full CRUD operations for Premier League players.
-* JWT authentication for secure access.
-* Role-based access control (ADMIN / USER).
-* REST API endpoints for player data.
-* Integration with MySQL database for persistent storage.
-
-## Installation
-
-To install this project, follow these steps:
-
-```bash
-# Clone the repository
-git clone https://github.com/shehabismai10/Premier-Zone.git
-
-# Navigate into the project directory
-cd Premier-Zone
-
-# Install dependencies (Maven for Spring Boot)
+Bash
 mvn clean install
-
-# Run the application
 mvn spring-boot:run
-```
+🔌 API Documentation
+🔐 Authentication Endpoints
+Base URL: http://localhost:8081/api/v1/auth
 
-## Usage
+1. Register a New User
+POST /register
 
-* Access the API endpoints via `http://localhost:8080`.
-* Use Postman or any HTTP client to test.
+Body:
 
-### Authentication
-
-#### POST /auth/register
-
-Register a new user.
-
-```json
+JSON
 {
-  "username": "user1",
-  "password": "password123",
-  "role": "USER"
-}
-```
-
-#### POST /auth/login
-
-Login and get JWT token.
-
-```json
-{
-  "username": "user1",
+  "username": "shehab",
+  "email": "shehab@example.com",
   "password": "password123"
 }
-```
+2. Login
+POST /login
 
+Body:
+
+JSON
+{
+  "email": "shehab@example.com",
+  "password": "password123"
+}
 Response:
 
-```json
+JSON
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  "token": "eyJhbGciOiJIUzM4NCJ9..."
 }
-```
+⚽ Player Endpoints
+Base URL: http://localhost:8081/api/v1/players
 
-### Player Endpoints
+Note: These endpoints require the Authorization: Bearer <JWT_TOKEN> header.
 
-> **Note:** All player endpoints require the `Authorization: Bearer <JWT_TOKEN>` header.
+GET / - Fetch all players.
 
-#### GET /players
+GET /{id} - Fetch player by ID.
 
-Fetch all players.
+POST / - Add a new player (Admin Only).
 
-```json
-[
-  {
-    "id": 1,
-    "name": "David Raya",
-    "position": "GKP",
-    "team": "Arsenal",
-    "points": 371
-  },
-  {
-    "id": 2,
-    "name": "Aaron Ramsdale",
-    "position": "GKP",
-    "team": "Arsenal",
-    "points": 250
-  }
-]
-```
+PUT /{id} - Update player details.
 
-#### GET /players/{id}
+DELETE /{id} - Remove a player.
 
-Fetch a single player by ID.
-
-```json
-{
-  "id": 1,
-  "name": "David Raya",
-  "position": "GKP",
-  "team": "Arsenal",
-  "points": 371
-}
-```
-
-#### POST /players
-
-Add a new player.
-
-```json
-{
-  "name": "New Player",
-  "position": "DEF",
-  "team": "Liverpool",
-  "points": 0
-}
-```
-
-Response:
-
-```json
-{
-  "message": "Player added successfully",
-  "playerId": 101
-}
-```
-
-#### PUT /players/{id}
-
-Update a player by ID.
-
-```json
-{
-  "name": "Updated Player",
-  "position": "MID",
-  "team": "Manchester United",
-  "points": 10
-}
-```
-
-Response:
-
-```json
-{
-  "message": "Player updated successfully"
-}
-```
-
-#### DELETE /players/{id}
-
-Delete a player by ID. Response:
-
-```json
-{
-  "message": "Player deleted successfully"
-}
-```
-
-## Project Structure
-
-```
+📂 Project Structure
 Premier-Zone/
 ├── src/
 │   ├── main/
-│   │   ├── java/com/shehab/premierzone/
-│   │   │   ├── controller/
-│   │   │   │   └── PlayerController.java
-│   │   │   ├── entity/
-│   │   │   │   └── Player.java
-│   │   │   ├── repository/
-│   │   │   │   └── PlayerRepository.java
-│   │   │   ├── service/
-│   │   │   │   └── PlayerService.java
-│   │   │   ├── security/
-│   │   │   │   ├── JwtService.java
-│   │   │   │   └── JwtAuthenticationFilter.java
-│   │   │   └── PremierZoneApplication.java
+│   │   ├── java/com/pl/premier_zone/
+│   │   │   ├── auth/          # Auth Controller & Service
+│   │   │   ├── config/        # Security & JWT Config
+│   │   │   ├── user/          # User Entity & Repository
+│   │   │   └── player/        # Player Logic (Controller, Service, Repo)
 │   │   └── resources/
 │   │       └── application.properties
 └── pom.xml
-```
+🛡️ Technologies Used
+Java 21
 
-## Contributing
+Spring Boot 3.x
 
-We welcome contributions! To contribute to this project, please follow these steps:
+Spring Security & JWT
 
-1. Fork the repository.
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`).
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
-4. Push to the branch (`git push origin feature/AmazingFeature`).
-5. Open a pull request.
+Spring Data JPA
 
+MySQL
 
-
-## Acknowledgments
-
-* Thank you to all contributors!
+Lombok

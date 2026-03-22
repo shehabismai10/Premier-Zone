@@ -17,13 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/players")
+@RequestMapping("/api/v1/players")
 public class PlayerController {
     private final PlayerService playerService;
 
     public PlayerController(PlayerService playerService) {
         this.playerService = playerService;
     }
+
 
 
     @GetMapping
@@ -49,6 +50,14 @@ public class PlayerController {
         else{
             return playerService.getPlayers(); // Return all players if no filters are provided}
         }
+    }
+
+    @GetMapping("/{id}")    
+    public ResponseEntity<Player> getPlayerById(@PathVariable Integer id){
+        Player player =  playerService.getPlayerById(id);
+
+        return ResponseEntity.ok(player);
+
     }
 
     

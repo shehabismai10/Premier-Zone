@@ -6,15 +6,23 @@
     import org.springframework.web.bind.annotation.RequestMapping;
     import org.springframework.web.bind.annotation.RestController;
 
-    import lombok.RequiredArgsConstructor;
+    //import lombok.RequiredArgsConstructor;
 
     @RestController
     @RequestMapping("/api/v1/auth")
-    @RequiredArgsConstructor
     public class AuthenticationController {
 
 
         private final AuthenticationService service;
+
+    public AuthenticationController(AuthenticationService service) {
+        this.service = service;
+    }
+
+
+
+        
+        
 
         @PostMapping("/register")
         public ResponseEntity<AuthenticationResponse>register(
