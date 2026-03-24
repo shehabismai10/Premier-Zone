@@ -38,30 +38,34 @@
   "email": "shehab@example.com",
   "password": "password123"
 }
-2. Login (POST /login)
+```
 
-JSON
+**2. Login (`POST /login`)**
+```json
 {
   "email": "shehab@example.com",
   "password": "password123"
 }
-Response: { "token": "eyJhbGci..." }
+```
+**Response:** ```json
+{ 
+  "token": "eyJhbGci..." 
+}
+```
 
-⚽ Player Endpoints (Bearer Token Required)
-Base URL: http://localhost:8081/api/v1/players
+### ⚽ Player Endpoints (Bearer Token Required)
+**Base URL:** `http://localhost:8081/api/v1/players`
 
-GET / - Fetch all players (Accessible by USER & ADMIN).
+* `GET /` - Fetch all players (Accessible by `USER` & `ADMIN`).
+* `GET /{id}` - Fetch player by ID.
+* `POST /` - Add a new player (**Admin Only**).
+* `PUT /{id}` - Update player details (**Admin Only**).
+* `DELETE /{id}` - Remove a player (**Admin Only**).
 
-GET /{id} - Fetch player by ID.
+---
 
-POST / - Add a new player (Admin Only).
-
-PUT /{id} - Update player details (Admin Only).
-
-DELETE /{id} - Remove a player (Admin Only).
-
-📂 Project Structure
-Plaintext
+## 📂 Project Structure
+```text
 Premier-Zone/
 ├── src/
 │   ├── main/
@@ -76,20 +80,35 @@ Premier-Zone/
 │   │   └── resources/
 │   │       └── application.properties
 └── pom.xml
-🛠️ Installation & Setup
-Clone the repository:
+```
 
-Bash
-git clone [https://github.com/shehabismai10/Premier-Zone.git](https://github.com/shehabismai10/Premier-Zone.git)
+---
+
+## 🛠️ Installation & Setup
+
+### 1. Clone the repository:
+```bash
+git clone https://github.com/shehabismai10/Premier-Zone.git
 cd Premier-Zone
-Database Configuration:
-Update src/main/resources/application.properties with your MySQL credentials.
+```
 
-Build and Run:
+### 2. Database Configuration:
+Update `src/main/resources/application.properties` with your MySQL credentials:
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/premier_zone
+spring.datasource.username=root
+spring.datasource.password=your_password
+```
 
-Bash
+### 3. Build and Run:
+```bash
 mvn clean spring-boot:run
-👨‍💻 Developer Note
-This project has been optimized to handle high-frequency requests by offloading non-critical tasks (like welcome notifications) to background threads using Spring's Task Executor. The use of DTOs and RBAC ensures the system follows industry-standard security and architectural patterns.
+```
 
-Developed by Shehab Ismail
+---
+
+## 👨‍💻 Developer Note
+This project has been optimized to handle high-frequency requests by offloading non-critical tasks (like welcome notifications) to background threads using **Spring's Task Executor**. The use of **DTOs** and **RBAC** ensures the system follows industry-standard security and architectural patterns.
+
+---
+**Developed by [Shehab Ismail](https://github.com/shehabismai10)**
