@@ -1,106 +1,106 @@
-🏟️ Premier Zone - Backend API
-📖 Description
-Premier Zone is a high-performance Java Spring Boot application built to manage and analyze Premier League player statistics. Beyond simple data management, this system implements a modern, event-driven architecture with a robust JWT-based security layer, ensuring a scalable and secure experience for both users and administrators.
 
-🚀 Key Features
-🛡️ Secure Auth & RBAC: Full JWT Authentication (Register/Login) with managed access for USER and ADMIN roles.
+# 🏟️ Premier Zone - Backend API
 
-⚡ Event-Driven Registration: Implements an asynchronous notification system. When a user registers, a UserRegisteredEvent is fired and handled in the background.
+## 📖 Description
+**Premier Zone** is a high-performance Java Spring Boot application built to manage and analyze Premier League player statistics. Beyond simple data management, this system implements a **modern, event-driven architecture** with a robust **JWT-based security layer**, ensuring a scalable and secure experience for both users and administrators.
 
-⚽ Comprehensive Player Stats: RESTful endpoints to manage Goals, Assists, and Team data.
+---
 
-🔗 Reliable Persistence: MySQL integration with optimized JPA queries and custom entity management for maximum stability.
+## 🚀 Key Features
+* 🛡️ **Secure Auth & RBAC**: Full JWT Authentication (Register/Login) with managed access for `USER` and `ADMIN` roles.
+* ⚡ **Event-Driven Registration**: Implements an asynchronous notification system. When a user registers, a `UserRegisteredEvent` is fired and handled in the background.
+* ⚽ **Comprehensive Player Stats**: RESTful endpoints to manage Goals, Assists, and Team data.
+* 🔗 **Reliable Persistence**: MySQL integration with optimized JPA queries and custom entity management for maximum stability.
+* 📖 **Live Documentation**: Integrated **Swagger/OpenAPI UI** for real-time API testing.
+* 🏗️ **Decoupled Logic**: Clean separation between Security, Business Logic, and Background Tasks.
 
-📖 Live Documentation: Integrated Swagger/OpenAPI UI for real-time API testing.
+---
 
-🏗️ Decoupled Logic: Clean separation between Security, Business Logic, and Background Tasks.
+## 🛠️ Technologies Used
+* **Java 25** (Latest Long-Term Support)
+* **Spring Boot 3.4.3**
+* **Spring Security & JWT**
+* **Spring Data JPA & MySQL**
+* **Maven** (Dependency Management)
 
-🛠️ Technologies Used
-Java 25 (Latest Long-Term Support)
+---
 
-Spring Boot 3.4.3
+## 🔌 API Documentation
 
-Spring Security & JWT
+### 🔐 Authentication Endpoints
+**Base URL:** `http://localhost:8081/api/v1/auth`
 
-Spring Data JPA & MySQL
-
-Maven (Dependency Management)
-
-🔌 API Documentation
-🔐 Authentication Endpoints
-Base URL: http://localhost:8081/api/v1/auth
-
-Register User (POST /register)
-
-JSON
+**1. Register User (`POST /register`)**
+```json
 {
   "username": "shehab_dev",
   "email": "shehab@example.com",
   "password": "password123"
 }
-Login (POST /login)
+```
 
-JSON
+**2. Login (`POST /login`)**
+```json
 {
   "email": "shehab@example.com",
   "password": "password123"
 }
-Response: { "token": "eyJhbGci..." }
+```
+**Response:** `{ "token": "eyJhbGci..." }`
 
-⚽ Player Endpoints (Bearer Token Required)
-Base URL: http://localhost:8081/api/v1/players
+### ⚽ Player Endpoints (Bearer Token Required)
+**Base URL:** `http://localhost:8081/api/v1/players`
 
-GET / - Fetch all players.
+* `GET /` - Fetch all players.
+* `GET /{id}` - Fetch player by ID.
+* `POST /` - Add a new player (**Admin Only**).
+* `PUT /{id}` - Update player details.
+* `DELETE /{id}` - Remove a player.
 
-GET /{id} - Fetch player by ID.
+---
 
-POST / - Add a new player (Admin Only).
+## 🛠️ Installation & Setup
 
-PUT /{id} - Update player details.
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/shehabismai10/Premier-Zone.git](https://github.com/shehabismai10/Premier-Zone.git)
+   cd Premier-Zone
+   ```
 
-DELETE /{id} - Remove a player.
+2. **Database Configuration:**
+   Update `src/main/resources/application.properties`:
+   ```properties
+   spring.datasource.url=jdbc:mysql://localhost:3306/premier_zone
+   spring.datasource.username=root
+   spring.datasource.password=yourpassword
+   ```
 
-🛠️ Installation & Setup
-Clone the repository:
+3. **Build and Run:**
+   ```bash
+   mvn clean compile
+   mvn spring-boot:run
+   ```
 
-Bash
-git clone https://github.com/shehabismai10/Premier-Zone.git
-cd Premier-Zone
-Database Configuration:
-Update src/main/resources/application.properties:
+---
 
-Properties
-spring.datasource.url=jdbc:mysql://localhost:3306/premier_zone
-spring.datasource.username=root
-spring.datasource.password=yourpassword
-Build and Run:
-
-Bash
-mvn clean compile
-mvn spring-boot:run
-📂 Project Structure
-Plaintext
+## 📂 Project Structure
+```text
 Premier-Zone/
 ├── src/
 │   ├── main/
 │   │   ├── java/com/pl/premier_zone/
 │   │   │   ├── auth/         # Auth Controller & Service Logic
 │   │   │   ├── config/       # Security, JWT & Async Config
-│   │   │   ├── user/         # User Entity (Manual Implementation) & Repo
-│   │   │   ├── player/       # Player Logic (Controller, Service, Repo)
+│   │   │   ├── user/         # User Entity & Repo
+│   │   │   ├── player/       # Player Logic
 │   │   │   ├── event/        # Custom Registration Events
 │   │   │   └── notification/ # Async Event Listeners
 │   │   └── resources/
 │   │       └── application.properties
 └── pom.xml
-👨‍💻 Developer Note
-This project has been optimized to handle high-frequency requests by offloading non-critical tasks (like welcome notifications) to background threads using Spring's Task Executor. This ensures the API remains responsive and fast.
+```
 
-💡 What's better in this version?
-Updated Versioning: Mentions Java 25 and Spring Boot 3.4.3.
+---
 
-Architecture Depth: Explains why the Events and Async logic are there (shows off your skills).
-
-Modern Layout: Cleaner tables and code blocks for better readability on GitHub.
-
-Updated Structure: Reflects the new event and notification packages we created.
+## 👨‍💻 Developer Note
+This project has been optimized to handle high-frequency requests by offloading non-critical tasks (like welcome notifications) to background threads using **Spring's Task Executor**. This ensures the API remains responsive and fast.
