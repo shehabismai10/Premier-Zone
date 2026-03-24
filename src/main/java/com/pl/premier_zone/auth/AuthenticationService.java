@@ -1,11 +1,13 @@
 package com.pl.premier_zone.auth;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.pl.premier_zone.config.JwtService;
+import com.pl.premier_zone.event.UserRegisteredEvent;
 import com.pl.premier_zone.user.Role;
 import com.pl.premier_zone.user.User;
 import com.pl.premier_zone.user.UserRepository;
@@ -17,18 +19,23 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final ApplicationEventPublisher eventPublisher;
+
 
     // الـ Constructor اليدوي لضمان الـ Dependency Injection حتى لو Lombok مهنج
     public AuthenticationService(
             UserRepository userRepository,
             JwtService jwtService,
             PasswordEncoder passwordEncoder,
-            AuthenticationManager authenticationManager
+            AuthenticationManager authenticationManager,
+            ApplicationEventPublisher eventPublisher
+
     ) {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
+        this.eventPublisher=eventPublisher;
     }
 
     /**
@@ -43,6 +50,9 @@ public class AuthenticationService {
         user.setRole(Role.USER);
 
         userRepository.save(user);
+
+        //this line to push the event (listener)
+        eventPublisher.publishEvent(new UserRegisteredEvent(user.getEmail(),user.getActualUsername()));
 
         // توليد التوكن
         var jwtToken = jwtService.generateToken(user);

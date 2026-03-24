@@ -4,6 +4,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
+
+import com.pl.premier_zone.exception.PlayerNotFoundException;
+
 import jakarta.transaction.Transactional;
 
 @Service
@@ -17,10 +20,9 @@ public class PlayerService {
     }
 
     public Player getPlayerById(Integer id) {
+        
         return playerRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, 
-                        "The player was not found by id: " + id));
+                .orElseThrow(() -> new PlayerNotFoundException( "Cannot find! Player with ID " + id + " doesn't exist."));
     }
 
     public List<Player> getPlayers() {
@@ -49,6 +51,10 @@ public class PlayerService {
     }
 
     public Player updatePlayer(Integer id, Player player) {
+            if(!playerRepository.existsById(id)){
+            throw new PlayerNotFoundException("Cannot update! Player with ID " + id + " doesn't exist.");
+        }
+        
         Player existingPlayer = playerRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Player was not found by id: " + id));
 
@@ -61,6 +67,9 @@ public class PlayerService {
 
     @Transactional
     public void deletePlayer(Integer id) {
+        if(!playerRepository.existsById(id)){
+            throw new PlayerNotFoundException("Cannot delete! Player with ID " + id + " doesn't exist.");
+        }
         playerRepository.deleteById(id);
     }
 }

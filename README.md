@@ -1,70 +1,54 @@
-Markdown
-# 🏟️ Premier-Zone
+🏟️ Premier Zone - Backend API
+📖 Description
+Premier Zone is a high-performance Java Spring Boot application built to manage and analyze Premier League player statistics. Beyond simple data management, this system implements a modern, event-driven architecture with a robust JWT-based security layer, ensuring a scalable and secure experience for both users and administrators.
 
-## 📖 Description
-Premier-Zone is a robust Java Spring Boot application designed to manage and analyze Premier League player statistics. The system features a secure **JWT-based authentication** layer, allowing for personalized user experiences and protected data management.
+🚀 Key Features
+🛡️ Secure Auth & RBAC: Full JWT Authentication (Register/Login) with managed access for USER and ADMIN roles.
 
-## 🚀 Features
-* **Secure Auth:** Full JWT Authentication (Register/Login).
-* **Premier League Data:** Comprehensive player stats (Goals, Assists, Teams).
-* **Role-Based Access:** Managed access for `USER` and `ADMIN` roles.
-* **Database Integration:** Persistent storage using MySQL.
-* **RESTful API:** Clean and versioned endpoints (`/api/v1`).
+⚡ Event-Driven Registration: Implements an asynchronous notification system. When a user registers, a UserRegisteredEvent is fired and handled in the background.
 
-## 🛠️ Installation & Setup
+⚽ Comprehensive Player Stats: RESTful endpoints to manage Goals, Assists, and Team data.
 
-1. **Clone the repository**
-   ```bash
-   git clone [https://github.com/shehabismai10/Premier-Zone.git](https://github.com/shehabismai10/Premier-Zone.git)
-   cd Premier-Zone
-Database Configuration
-Update src/main/resources/application.properties with your MySQL credentials:
+🔗 Reliable Persistence: MySQL integration with optimized JPA queries and custom entity management for maximum stability.
 
-Properties
-spring.datasource.url=jdbc:mysql://localhost:3306/premier_league
-spring.datasource.username=root
-spring.datasource.password=root
-spring.jpa.hibernate.ddl-auto=update
-Build and Run
+📖 Live Documentation: Integrated Swagger/OpenAPI UI for real-time API testing.
 
-Bash
-mvn clean install
-mvn spring-boot:run
+🏗️ Decoupled Logic: Clean separation between Security, Business Logic, and Background Tasks.
+
+🛠️ Technologies Used
+Java 25 (Latest Long-Term Support)
+
+Spring Boot 3.4.3
+
+Spring Security & JWT
+
+Spring Data JPA & MySQL
+
+Maven (Dependency Management)
+
 🔌 API Documentation
 🔐 Authentication Endpoints
 Base URL: http://localhost:8081/api/v1/auth
 
-1. Register a New User
-POST /register
-
-Body:
+Register User (POST /register)
 
 JSON
 {
-  "username": "shehab",
+  "username": "shehab_dev",
   "email": "shehab@example.com",
   "password": "password123"
 }
-2. Login
-POST /login
-
-Body:
+Login (POST /login)
 
 JSON
 {
   "email": "shehab@example.com",
   "password": "password123"
 }
-Response:
+Response: { "token": "eyJhbGci..." }
 
-JSON
-{
-  "token": "eyJhbGciOiJIUzM4NCJ9..."
-}
-⚽ Player Endpoints
+⚽ Player Endpoints (Bearer Token Required)
 Base URL: http://localhost:8081/api/v1/players
-
-Note: These endpoints require the Authorization: Bearer <JWT_TOKEN> header.
 
 GET / - Fetch all players.
 
@@ -76,27 +60,47 @@ PUT /{id} - Update player details.
 
 DELETE /{id} - Remove a player.
 
+🛠️ Installation & Setup
+Clone the repository:
+
+Bash
+git clone https://github.com/shehabismai10/Premier-Zone.git
+cd Premier-Zone
+Database Configuration:
+Update src/main/resources/application.properties:
+
+Properties
+spring.datasource.url=jdbc:mysql://localhost:3306/premier_zone
+spring.datasource.username=root
+spring.datasource.password=yourpassword
+Build and Run:
+
+Bash
+mvn clean compile
+mvn spring-boot:run
 📂 Project Structure
+Plaintext
 Premier-Zone/
 ├── src/
 │   ├── main/
 │   │   ├── java/com/pl/premier_zone/
-│   │   │   ├── auth/          # Auth Controller & Service
-│   │   │   ├── config/        # Security & JWT Config
-│   │   │   ├── user/          # User Entity & Repository
-│   │   │   └── player/        # Player Logic (Controller, Service, Repo)
+│   │   │   ├── auth/         # Auth Controller & Service Logic
+│   │   │   ├── config/       # Security, JWT & Async Config
+│   │   │   ├── user/         # User Entity (Manual Implementation) & Repo
+│   │   │   ├── player/       # Player Logic (Controller, Service, Repo)
+│   │   │   ├── event/        # Custom Registration Events
+│   │   │   └── notification/ # Async Event Listeners
 │   │   └── resources/
 │   │       └── application.properties
 └── pom.xml
-🛡️ Technologies Used
-Java 21
+👨‍💻 Developer Note
+This project has been optimized to handle high-frequency requests by offloading non-critical tasks (like welcome notifications) to background threads using Spring's Task Executor. This ensures the API remains responsive and fast.
 
-Spring Boot 3.x
+💡 What's better in this version?
+Updated Versioning: Mentions Java 25 and Spring Boot 3.4.3.
 
-Spring Security & JWT
+Architecture Depth: Explains why the Events and Async logic are there (shows off your skills).
 
-Spring Data JPA
+Modern Layout: Cleaner tables and code blocks for better readability on GitHub.
 
-MySQL
-
-Lombok
+Updated Structure: Reflects the new event and notification packages we created.

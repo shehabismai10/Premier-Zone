@@ -57,6 +57,19 @@ public class User implements org.springframework.security.core.userdetails.UserD
         return email; 
     }
 
+    public String getEmail(){
+        return email;
+    }
+    public String getActualUsername(){
+        return username;
+
+
+    }
+
+    
+
+    
+
     @Override
     public boolean isAccountNonExpired() {
         return true; 

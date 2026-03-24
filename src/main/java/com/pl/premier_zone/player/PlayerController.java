@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
+
 
 
 @RestController
@@ -68,7 +70,7 @@ public class PlayerController {
 
     
     @PostMapping
-    public ResponseEntity<Player> addPlayer(@RequestBody Player player){
+    public ResponseEntity<Player> addPlayer(@Valid @RequestBody Player player){ //the @valid annotation tells the to go check the constrains in the entity(player) 
         
         Player createdPlayer = playerService.addPlayer(player);
 
@@ -76,20 +78,16 @@ public class PlayerController {
 
 
     }
-     
+    
     @PutMapping("/{id}")
-    public ResponseEntity<Player> updatePlayer(@PathVariable Integer id, @RequestBody Player player){
-        Player updatedPlayer = playerService.updatePlayer(id,player);
-
-        if (updatedPlayer != null) {
-            return new ResponseEntity<>(updatedPlayer, HttpStatus.OK); // Return the updated player with a 200 OK status
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Return a 404 Not Found status if the player was not found
-        }
+    public ResponseEntity<Player> updatePlayer(@PathVariable Integer id, @RequestBody Player player) {
         
-        
-        //return entity;
+        Player updatedPlayer = playerService.updatePlayer(id, player);
+        return ResponseEntity.ok(updatedPlayer);
     }
+        
+        
+    
 
 
     @DeleteMapping("/{id}")
